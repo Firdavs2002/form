@@ -4,14 +4,18 @@
       <div class="app__header">
         Вывод
       </div>
-      <div class="app__content" v-if="getJSON.name">
+      <div class="app__content">
         <ul>
           {
-          <li v-for="(item, name, index) in getJSON"
+          <li v-for="(item, name, index) in getItems"
             :key="index">
 
-            <span class="key">{{ name }}</span> :
-            <span class="value">{{ item }}</span>
+            <span class="key">{{ item.name }}</span> :
+            <span class="value">{{ item.value }}</span>
+          </li>
+          <li>
+            <span class="key">select</span> :
+            <span class="value">{{ getSelect }}</span>
           </li>
           }
         </ul>
@@ -25,11 +29,11 @@
 import { mapMutations, mapGetters } from "vuex";
 
 export default {
-  computed: mapGetters(["getJSON"]),
+  computed: mapGetters(["getItems", "getSelect"]),
   methods: {
-    ...mapMutations(["clearJSON"]),
+    ...mapMutations(["clearItems"]),
     clear() {
-      this.clearJSON({})
+      this.clearItems(null)
     }
   }
 }

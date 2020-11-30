@@ -5,7 +5,7 @@
         Ввод
       </div>
       <form method="POST" class="app__content" @submit.prevent="checkForm()">
-        <ItemInput v-for="(item, index) of items"
+        <ItemInput v-for="(item, index) of getItems"
                    :key="index"
                    :info="item"/>
         <div class="input">
@@ -29,37 +29,23 @@ export default {
   data() {
     return {
       select: '',
-      saveValue: {},
-      items: [
-      {
-        name: 'name',
-        type: 'text',
-        value: '',
-        placeholder: 'имя'
-      },
-      {
-        name: 'surname',
-        type: 'text',
-        value: '',
-        placeholder: 'фамилия'
-      },
-      {
-        name: 'birthDate',
-        type: 'date',
-        value: '',
-        placeholder: ''
-      },
-    ]
-      
+      saveValue: {},      
     }
   },
+  watch: {
+    select() {
+      this.selected(this.select)
+    }
+  },
+  computed: mapGetters(["getJSON", "getItems"]),
   components: {
     ItemInput
   },
   methods: {
-    ...mapMutations(["setJSON"]),
+    ...mapMutations(["setJSON", "selected"]),
+    
     checkForm() {
-      this.saveValue = this.items.map(o => o.value)
+      this.saveValue = this.getItems.map(o => o.value)
       
       const save = {
         name: this.saveValue[0],
@@ -72,11 +58,7 @@ export default {
       this.setJSON(save)
       
       // имитируем получения JSON запроса и выводим в консоль
-      console.log(JSON.parse(JSON.stringify(save)))
-
-      // очищаем поля
-      this.items.forEach(e => e.value = '')
-
+      console.log(JSON.parse(JSON.stringify(this.getJSON)))
     }
   }
 }
